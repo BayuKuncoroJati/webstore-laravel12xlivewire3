@@ -68,9 +68,14 @@ class ProductCatalog extends Component
 
         $products = ProductData::collect(
             $query->paginate(8)
-        ); // Passing & Processing DTO
+        );
         $collections = ProductCollectionData::collect($collection_result);
 
+        // $result = Product::paginate(8); // ORM / Database Query (Connect to database)
+
+        // $products = ProductData::collect($result); // Passing & Processing DTO
+        // $collections = ProductCollectionData::collect($collection_result);
+        
         return view('livewire.product-catalog', compact('products', 'collections')); // Presentation
     }
 }
