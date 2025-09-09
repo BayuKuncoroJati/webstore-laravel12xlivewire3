@@ -25,8 +25,25 @@ class ProductCatalog extends Component
 
     public string $sort_by = 'newest';
 
+    public function mount()
+    {
+        $this->validate();
+    }
+
+    public function rules()
+    {
+        return [
+            'select_collections'    => 'array',
+            'select_collections.*'  => 'int|exists:tags,id',
+            'search'                => 'nullable|string|min:3|max:30',
+            'sort_by'               => 'in:newest,latest,price_asc,price_desc'
+        ];
+    }
+
     public function applyFilters()
     {
+        $this->validate();
+
         $this->resetPage();
     }
 
@@ -35,11 +52,20 @@ class ProductCatalog extends Component
         $this->select_collections = [];
         $this->search = '';
         $this->sort_by = 'newest';
+
+        $this->resetErrorBag();
         $this->resetPage();
     }
 
     public function render()
     {
+        $collections = ProductCollectionData::collect([]);
+        $products = ProductData::collect([]);
+        // Early Return
+        if ($this->getErrorBag()->isNotEmpty()) {
+            return view('livewire.product-catalog', compact('products', 'collections'));
+        }
+
         $collection_result = Tag::query()->withType('collection')->withCount('products')->get(); // Collection tags spatie
         // $result = Product::paginate(8); // ORM / Database Query (Connect to database)
         $query = Product::query();
