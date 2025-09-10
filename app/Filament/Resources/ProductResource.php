@@ -16,6 +16,7 @@ use App\Filament\Resources\ProductResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use App\Filament\Resources\ProductResource\RelationManagers;
+use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\SpatieTagsInput;
 use Filament\Tables\Columns\TextColumn;
 
@@ -55,7 +56,8 @@ class ProductResource extends Resource
                         ->prefix('Rp'),
                     TextInput::make('weight')
                         ->numeric()
-                        ->suffix('gram')
+                        ->suffix('gram'),
+                    MarkdownEditor::make('description')
                 ])
 
             ]);

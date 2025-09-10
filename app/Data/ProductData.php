@@ -17,19 +17,20 @@ class ProductData extends Data
     public string $price_formatted;
     public function __construct(
         public string $name,
-        public string $short_desc,
+        public string $sort_desc,
         public string $sku,
         public string $slug,
         public string|Optional|null $description,
         public int $stock,
         public float $price,
         public int $weight,
-        public string $cover_url
+        public string $cover_url,
+        public array|Optional $gallery = new Optional()
     ) {
         $this->price_formatted = Number::currency($price);
     }
 
-    public static function fromModel(Product $product): self
+    public static function fromModel(Product $product, bool $with_gallery = false): self
     {
         return new self(
             $product->name,
@@ -40,7 +41,8 @@ class ProductData extends Data
             $product->stock,
             floatval($product->price),
             $product->weight,
-            $product->getFirstMediaUrl('cover')
+            $product->getFirstMediaUrl('cover'),
+            gallery: $with_gallery ? $product->getMedia('gallery')->map(fn($record) => $record->getUrl())->toArray() : new Optional()
         );
     }
 }
