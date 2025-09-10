@@ -2,14 +2,35 @@
 
 namespace App\Livewire;
 
+use App\Data\CartItemData;
 use Livewire\Component;
+use App\Data\ProductData;
+use App\Contract\CartServiceInterface;
 
 class AddToCart extends Component
 {
-    public int $quantity = 1;
-    public function addToCart()
+    public int $quantity;
+    public string $sku;
+    public float $price;
+    public int $stock;
+    public int $weight;
+    public string $label = 'Add To Cart ';
+    public function mount(ProductData $product, CartServiceInterface $cart)
     {
-        dd($this->quantity);
+        $this->sku = $product->sku;
+        $this->price = $product->price;
+        $this->stock = $product->stock;
+        $this->weight = $product->weight;
+        $this->quantity = $cart->getItemBySku($product->sku)->quantity ?? 1;
+    }
+    public function addToCart(CartServiceInterface $cart)
+    {
+        $cart->addOrUpdate(new CartItemData(
+            sku: $this->sku,
+            quantity: $this->quantity,
+            price: $this->price,
+            weight: $this->weight
+        ));
     }
     public function render()
     {
