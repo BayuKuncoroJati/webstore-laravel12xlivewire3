@@ -41,6 +41,7 @@ class AddToCart extends Component
             price: $this->price,
             weight: $this->weight
         ));
+        session()->flash('success', 'Product added to cart');
 
         $this->dispatch('cart-updated');
 

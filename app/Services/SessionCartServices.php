@@ -55,6 +55,8 @@ class SessionCartServices implements CartServiceInterface
         ->reject(fn(CartItemData $i) => $i->sku === $sku)
         ->values()
         ->collect();
+
+        $this->save($cart);
     }
     public function getItemBySku(string $sku) : ?CartItemData
     {
