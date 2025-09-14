@@ -2,9 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Actions\ValidateCartStock;
 use Livewire\Component;
 use Illuminate\Support\Collection;
 use App\Contract\CartServiceInterface;
+use Illuminate\Validation\ValidationException;
 
 class Cart extends Component
 {
@@ -20,6 +22,16 @@ class Cart extends Component
     public function getItemsProperty(CartServiceInterface $cart): Collection
     {
         return $cart->all()->items->toCollection();
+    }
+    public function checkout()
+    {
+        try {
+            ValidateCartStock::run();
+            return to_route('checkout');
+        } catch (ValidationException $e) {
+            session()->flash('error', $e->getMessage());
+            return to_route('cart');
+        }
     }
     public function render()
     {

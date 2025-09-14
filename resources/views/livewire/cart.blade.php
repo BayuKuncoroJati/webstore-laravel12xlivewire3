@@ -7,8 +7,7 @@
                     @forelse ($items as $item)
                         <div class="flex items-center gap-5 pb-5 border-b border-gray-200">
                             <div class="relative w-40 h-40 overflow-hidden rounded-xl">
-                                <img class="object-coversize-full"
-                                    src="{{ $item->product()->cover_url }}"
+                                <img class="object-coversize-full" src="{{ $item->product()->cover_url }}"
                                     alt="{{ $item->sku }}">
                             </div>
                             <div class="flex items-center">
@@ -19,7 +18,8 @@
                                     <h2 class="text-sm text-gray-800">{{ $item->product()->sort_desc }}</h2>
                                     <div class="flex items-center gap-2 my-5">
 
-                                        <livewire:add-to-cart wire:key="add-to-cart-{{ $item->sku }}" :product="$item->product()" />
+                                        <livewire:add-to-cart wire:key="add-to-cart-{{ $item->sku }}"
+                                            :product="$item->product()" />
 
                                         <p class="px-3 py-2 mt-1 text-xl font-semibold text-black dark:text-black">
                                             {{ $item->product()->price_formatted }}
@@ -65,9 +65,14 @@
                         </li>
                     </ul>
                     <!-- End List Group -->
-                    <button type="button" onclick="window.location.href='/checkout'"
+                    <button type="button" wire:click="checkout" wire:loading.attr="disabled"
                         class="inline-flex items-center justify-center w-full px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg cursor-pointer gap-x-2 hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
                         Checkout Now
+                        <div wire:loading
+                            class="animate-spin inline-block size-4 border-3 border-current border-t-transparent text-white rounded-full dark:text-white"
+                            role="status" aria-label="loading">
+                            <span class="sr-only">Loading...</span>
+                        </div>
                     </button>
                 </div>
             </div>
